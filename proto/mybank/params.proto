@@ -1,0 +1,12 @@
+syntax = "proto3";
+package taikifuru.mybank.mybank;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package taikifuru.mybank.mybank;
+
+import "gogoproto/gogo.proto";
+import "mybank/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
+
+// GenesisState defines the mybank module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}
