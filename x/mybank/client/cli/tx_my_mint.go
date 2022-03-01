@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -37,6 +38,7 @@ func CmdMyMint() *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
+	fmt.Printf("succeded")
 
 	flags.AddTxFlagsToCmd(cmd)
 

@@ -1,6 +1,11 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../mybank/params";
+import {
+  PageRequest,
+  PageResponse,
+} from "../cosmos/base/query/v1beta1/pagination";
+import { Balance } from "../mybank/balance";
 
 export const protobufPackage = "taikifuru.mybank.mybank";
 
@@ -11,6 +16,15 @@ export interface QueryParamsRequest {}
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
   params: Params | undefined;
+}
+
+export interface QueryBalancesRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryBalancesResponse {
+  Balance: Balance[];
+  pagination: PageResponse | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -110,10 +124,165 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryBalancesRequest: object = {};
+
+export const QueryBalancesRequest = {
+  encode(
+    message: QueryBalancesRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryBalancesRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryBalancesRequest } as QueryBalancesRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryBalancesRequest {
+    const message = { ...baseQueryBalancesRequest } as QueryBalancesRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryBalancesRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryBalancesRequest>): QueryBalancesRequest {
+    const message = { ...baseQueryBalancesRequest } as QueryBalancesRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryBalancesResponse: object = {};
+
+export const QueryBalancesResponse = {
+  encode(
+    message: QueryBalancesResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.Balance) {
+      Balance.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryBalancesResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryBalancesResponse } as QueryBalancesResponse;
+    message.Balance = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Balance.push(Balance.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryBalancesResponse {
+    const message = { ...baseQueryBalancesResponse } as QueryBalancesResponse;
+    message.Balance = [];
+    if (object.Balance !== undefined && object.Balance !== null) {
+      for (const e of object.Balance) {
+        message.Balance.push(Balance.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryBalancesResponse): unknown {
+    const obj: any = {};
+    if (message.Balance) {
+      obj.Balance = message.Balance.map((e) =>
+        e ? Balance.toJSON(e) : undefined
+      );
+    } else {
+      obj.Balance = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryBalancesResponse>
+  ): QueryBalancesResponse {
+    const message = { ...baseQueryBalancesResponse } as QueryBalancesResponse;
+    message.Balance = [];
+    if (object.Balance !== undefined && object.Balance !== null) {
+      for (const e of object.Balance) {
+        message.Balance.push(Balance.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a list of Balances items. */
+  Balances(request: QueryBalancesRequest): Promise<QueryBalancesResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -129,6 +298,18 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  Balances(request: QueryBalancesRequest): Promise<QueryBalancesResponse> {
+    const data = QueryBalancesRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "taikifuru.mybank.mybank.Query",
+      "Balances",
+      data
+    );
+    return promise.then((data) =>
+      QueryBalancesResponse.decode(new Reader(data))
+    );
   }
 }
 

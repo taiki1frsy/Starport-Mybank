@@ -28,7 +28,11 @@ func (k Keeper) GetBalance(ctx sdk.Context, addr sdk.AccAddress) sdk.Int {
 
 	// Get balalnce data from account balance store with address key
 	addrByte := addr.Bytes()
+	// check if it exits
 	balance := balanceStore.Get(addrByte)
+	if balance != nil {
+		return sdk.ZeroInt()
+	}
 	balanceUint := binary.BigEndian.Uint64(balance)
 	balanceInt := sdk.NewIntFromUint64(balanceUint)
 

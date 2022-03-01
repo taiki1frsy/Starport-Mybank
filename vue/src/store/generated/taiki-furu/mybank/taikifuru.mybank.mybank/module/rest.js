@@ -130,12 +130,27 @@ export class HttpClient {
     }
 }
 /**
- * @title mybank/genesis.proto
+ * @title mybank/balance.proto
  * @version version not set
  */
 export class Api extends HttpClient {
     constructor() {
         super(...arguments);
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryBalances
+         * @summary Queries a list of Balances items.
+         * @request GET:/taiki-furu/mybank/mybank/balances
+         */
+        this.queryBalances = (query, params = {}) => this.request({
+            path: `/taiki-furu/mybank/mybank/balances`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
         /**
          * No description
          *

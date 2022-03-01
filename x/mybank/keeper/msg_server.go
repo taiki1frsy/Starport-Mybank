@@ -43,11 +43,5 @@ func (k msgServer) MySend(goCtx context.Context, msg *types.MsgMySend) (*types.M
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
-		),
-	)
 	return &types.MsgMySendResponse{}, nil
 }

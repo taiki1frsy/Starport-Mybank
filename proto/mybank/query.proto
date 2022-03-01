@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "mybank/params.proto";
+import "mybank/balance.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
@@ -15,7 +16,12 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/taikifuru/mybank/mybank/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a list of Balances items.
+	rpc Balances(QueryBalancesRequest) returns (QueryBalancesResponse) {
+		option (google.api.http).get = "/taiki-furu/mybank/mybank/balances";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +31,15 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryBalancesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryBalancesResponse {
+  repeated Balance Balance = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

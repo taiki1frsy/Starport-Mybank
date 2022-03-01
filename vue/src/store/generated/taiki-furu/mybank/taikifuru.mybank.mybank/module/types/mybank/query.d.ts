@@ -1,5 +1,7 @@
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../mybank/params";
+import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
+import { Balance } from "../mybank/balance";
 export declare const protobufPackage = "taikifuru.mybank.mybank";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {
@@ -8,6 +10,13 @@ export interface QueryParamsRequest {
 export interface QueryParamsResponse {
     /** params holds all the parameters of this module. */
     params: Params | undefined;
+}
+export interface QueryBalancesRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryBalancesResponse {
+    Balance: Balance[];
+    pagination: PageResponse | undefined;
 }
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: Writer): Writer;
@@ -23,15 +32,32 @@ export declare const QueryParamsResponse: {
     toJSON(message: QueryParamsResponse): unknown;
     fromPartial(object: DeepPartial<QueryParamsResponse>): QueryParamsResponse;
 };
+export declare const QueryBalancesRequest: {
+    encode(message: QueryBalancesRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryBalancesRequest;
+    fromJSON(object: any): QueryBalancesRequest;
+    toJSON(message: QueryBalancesRequest): unknown;
+    fromPartial(object: DeepPartial<QueryBalancesRequest>): QueryBalancesRequest;
+};
+export declare const QueryBalancesResponse: {
+    encode(message: QueryBalancesResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryBalancesResponse;
+    fromJSON(object: any): QueryBalancesResponse;
+    toJSON(message: QueryBalancesResponse): unknown;
+    fromPartial(object: DeepPartial<QueryBalancesResponse>): QueryBalancesResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+    /** Queries a list of Balances items. */
+    Balances(request: QueryBalancesRequest): Promise<QueryBalancesResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+    Balances(request: QueryBalancesRequest): Promise<QueryBalancesResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

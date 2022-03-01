@@ -99,7 +99,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "cosmos"
+	AccountAddressPrefix = "mybank"
 	Name                 = "mybank"
 )
 

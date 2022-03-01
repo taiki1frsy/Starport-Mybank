@@ -2,10 +2,11 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex'
 
+import { Balance } from "./module/types/mybank/balance"
 import { Params } from "./module/types/mybank/params"
 
 
-export { Params };
+export { Balance, Params };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -44,8 +45,10 @@ function getStructure(template) {
 const getDefaultState = () => {
 	return {
 				Params: {},
+				Balances: {},
 				
 				_Structure: {
+						Balance: getStructure(Balance.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						
 		},
@@ -80,6 +83,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Params[JSON.stringify(params)] ?? {}
+		},
+				getBalances: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.Balances[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -137,6 +146,32 @@ export default {
 		},
 		
 		
+		
+		
+		 		
+		
+		
+		async QueryBalances({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryBalances(query)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await queryClient.queryBalances({...query, 'pagination.key':(<any> value).pagination.next_key})).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'Balances', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryBalances', payload: { options: { all }, params: {...key},query }})
+				return getters['getBalances']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new SpVuexError('QueryClient:QueryBalances', 'API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
 		async sendMsgMySend({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -149,21 +184,6 @@ export default {
 					throw new SpVuexError('TxClient:MsgMySend:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new SpVuexError('TxClient:MsgMySend:Send', 'Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
-		async sendMsgMyMultiMint({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgMyMultiMint(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgMyMultiMint:Send', 'Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
@@ -182,6 +202,21 @@ export default {
 				}
 			}
 		},
+		async sendMsgMyMultiMint({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgMyMultiMint(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new SpVuexError('TxClient:MsgMyMultiMint:Send', 'Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		
 		async MsgMySend({ rootGetters }, { value }) {
 			try {
@@ -197,20 +232,6 @@ export default {
 				}
 			}
 		},
-		async MsgMyMultiMint({ rootGetters }, { value }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgMyMultiMint(value)
-				return msg
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgMyMultiMint:Create', 'Could not create message: ' + e.message)
-					
-				}
-			}
-		},
 		async MsgMyMint({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -221,6 +242,20 @@ export default {
 					throw new SpVuexError('TxClient:MsgMyMint:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new SpVuexError('TxClient:MsgMyMint:Create', 'Could not create message: ' + e.message)
+					
+				}
+			}
+		},
+		async MsgMyMultiMint({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgMyMultiMint(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new SpVuexError('TxClient:MsgMyMultiMint:Create', 'Could not create message: ' + e.message)
 					
 				}
 			}
