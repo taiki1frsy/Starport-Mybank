@@ -13,7 +13,7 @@ import (
 
 type (
 	Keeper struct {
-		cdc        codec.BinaryCodec
+		cdc        codec.BinaryMarshaler
 		storeKey   sdk.StoreKey
 		memKey     sdk.StoreKey
 		paramstore paramtypes.Subspace
@@ -21,7 +21,7 @@ type (
 )
 
 func NewKeeper(
-	cdc codec.BinaryCodec,
+	cdc codec.BinaryCMarshaler,
 	storeKey,
 	memKey sdk.StoreKey,
 	ps paramtypes.Subspace,

@@ -15,6 +15,9 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_mybank"
+
+	// BalanceKey defines account - balance store prefix
+	BalanceKey = "Account-balance-"
 )
 
 func KeyPrefix(p string) []byte {
