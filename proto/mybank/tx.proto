@@ -7,7 +7,38 @@ option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc MyMint(MsgMyMint) returns (MsgMyMintResponse);
+  rpc MyMultiMint(MsgMyMultiMint) returns (MsgMyMultiMintResponse);
+  rpc MySend(MsgMySend) returns (MsgMySendResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgMyMint {
+  string creator = 1;
+  string amount = 2;
+  string receiver = 3;
+}
+
+message MsgMyMintResponse {
+}
+
+message MsgMyMultiMint {
+  string creator = 1;
+  string amount = 2;
+  repeated string receivers = 3;
+}
+
+message MsgMyMultiMintResponse {
+}
+
+message MsgMySend {
+  string creator = 1;
+  string from = 2;
+  string to = 3;
+  string amount = 4;
+}
+
+message MsgMySendResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

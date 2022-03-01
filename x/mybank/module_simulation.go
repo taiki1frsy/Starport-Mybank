@@ -24,7 +24,19 @@ var (
 )
 
 const (
-// this line is used by starport scaffolding # simapp/module/const
+	opWeightMsgMyMint = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgMyMint int = 100
+
+	opWeightMsgMyMultiMint = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgMyMultiMint int = 100
+
+	opWeightMsgMySend = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgMySend int = 100
+
+	// this line is used by starport scaffolding # simapp/module/const
 )
 
 // GenerateGenesisState creates a randomized GenState of the module
@@ -56,6 +68,39 @@ func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
+
+	var weightMsgMyMint int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMyMint, &weightMsgMyMint, nil,
+		func(_ *rand.Rand) {
+			weightMsgMyMint = defaultWeightMsgMyMint
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgMyMint,
+		mybanksimulation.SimulateMsgMyMint(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgMyMultiMint int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMyMultiMint, &weightMsgMyMultiMint, nil,
+		func(_ *rand.Rand) {
+			weightMsgMyMultiMint = defaultWeightMsgMyMultiMint
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgMyMultiMint,
+		mybanksimulation.SimulateMsgMyMultiMint(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgMySend int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMySend, &weightMsgMySend, nil,
+		func(_ *rand.Rand) {
+			weightMsgMySend = defaultWeightMsgMySend
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgMySend,
+		mybanksimulation.SimulateMsgMySend(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
 
