@@ -140,6 +140,21 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryMyBalances
+         * @summary Queries a list of MyBalances items.
+         * @request GET:/taiki-furu/mybank/mybank/my_balances
+         */
+        this.queryMyBalances = (query, params = {}) => this.request({
+            path: `/taiki-furu/mybank/mybank/my_balances`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryParams
          * @summary Parameters queries the parameters of the module.
          * @request GET:/taikifuru/mybank/mybank/params

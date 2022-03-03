@@ -1,0 +1,11 @@
+syntax = "proto3";
+package taikifuru.mybank.mybank;
+
+option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
+
+import "gogoproto/gogo.proto";
+
+message MyBalance {
+    string address = 1;
+    string value= 2;
+}
