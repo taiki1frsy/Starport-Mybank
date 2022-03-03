@@ -134,23 +134,6 @@ export default {
                 }
             }
         },
-        async sendMsgMyMultiMint({ rootGetters }, { value, fee = [], memo = '' }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgMyMultiMint(value);
-                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
-                        gas: "200000" }, memo });
-                return result;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgMyMultiMint:Send', 'Could not broadcast Tx: ' + e.message);
-                }
-            }
-        },
         async sendMsgMyMint({ rootGetters }, { value, fee = [], memo = '' }) {
             try {
                 const txClient = await initTxClient(rootGetters);
@@ -165,6 +148,23 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgMyMint:Send', 'Could not broadcast Tx: ' + e.message);
+                }
+            }
+        },
+        async sendMsgMyMultiMint({ rootGetters }, { value, fee = [], memo = '' }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgMyMultiMint(value);
+                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
+                        gas: "200000" }, memo });
+                return result;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgMyMultiMint:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
@@ -183,21 +183,6 @@ export default {
                 }
             }
         },
-        async MsgMyMultiMint({ rootGetters }, { value }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgMyMultiMint(value);
-                return msg;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgMyMultiMint:Create', 'Could not create message: ' + e.message);
-                }
-            }
-        },
         async MsgMyMint({ rootGetters }, { value }) {
             try {
                 const txClient = await initTxClient(rootGetters);
@@ -210,6 +195,21 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgMyMint:Create', 'Could not create message: ' + e.message);
+                }
+            }
+        },
+        async MsgMyMultiMint({ rootGetters }, { value }) {
+            try {
+                const txClient = await initTxClient(rootGetters);
+                const msg = await txClient.msgMyMultiMint(value);
+                return msg;
+            }
+            catch (e) {
+                if (e == MissingWalletError) {
+                    throw new SpVuexError('TxClient:MsgMyMultiMint:Init', 'Could not initialize signing client. Wallet is required.');
+                }
+                else {
+                    throw new SpVuexError('TxClient:MsgMyMultiMint:Create', 'Could not create message: ' + e.message);
                 }
             }
         },
