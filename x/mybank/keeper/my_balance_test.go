@@ -11,6 +11,7 @@ import (
 
 	//"github.com/taiki-furu/mybank/testutil/keeper"
 
+	"github.com/taiki-furu/mybank/x/mybank/keeper"
 	"github.com/taiki-furu/mybank/x/mybank/types"
 )
 
@@ -19,6 +20,7 @@ var (
 		Address: "cosmos17sntfnytl7g69pcdzeydty6t2ndztwh6nxtyeg",
 		Value:   "10000",
 	}
+	testAddress = "cosmos17sntfnytl7g69pcdzeydty6t2ndztwh6nxtyez"
 	//ctx = sdk.Contex
 )
 
@@ -32,24 +34,23 @@ type IntegrationTestSuite struct {
 
 func (suite *IntegrationTestSuite) SetupSuite() {
 	suite.T().Logf("===== SetupSuite =====")
-
 }
 
 // Don't get how to use suite package to test in this sdk  ffffuuuuuuu**********k
-func TestGetMyBalance(t *testing.T) {
-	//k := keeper.Keeper{}
+func (suite *IntegrationTestSuite) TestGetMyBalance() {
+	k := keeper.Keeper{}
 	fmt.Println("heeeeeeeeeeeeeeeeeellllllllllllllllllloooooooooooooooooooo")
 	fmt.Printf("balance: %v\n", genesisAcc)
 	address, _ := sdk.AccAddressFromBech32(genesisAcc.Address)
 	fmt.Printf("address: %v\n", address)
-	fmt.Printf("addrss byte: %v\n", address.Bytes())
+	//fmt.Printf("addrss byte: %v\n", address.Bytes())
 
-	//mybalance := k.GetMyBalance(,  address)
+	mybalance := k.GetMyBalance(suite.ctx, testAddress)
 
-	//t.Logf("%v", mybalance)
+	suite.T().Logf("%v", mybalance)
 	//fmt.Printf("mybalance : %v", mybalance)
 }
 
-func TestOfTest(t *testing.T) {
-	fmt.Println("Test of test")
+func TestKeeperTestSuite(t *testing.T) {
+	suite.Run(t, new(IntegrationTestSuite))
 }
