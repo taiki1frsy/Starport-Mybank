@@ -15,3 +15,7 @@ And then, enable to use my-send in this way:
 mybankd tx mybank my-send [fromAddr] [toAddr] [amount]
 ~~~
 Mysend prevents from incorrect amount transfer.
+Can get all balances object:
+~~~ zsh
+mybank q mybank my-balances
+~~~
