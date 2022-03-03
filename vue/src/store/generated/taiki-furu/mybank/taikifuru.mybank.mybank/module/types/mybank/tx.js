@@ -122,7 +122,7 @@ export const MsgMyMintResponse = {
         return message;
     },
 };
-const baseMsgMyMultiMint = { creator: "", amount: "", receivers: "" };
+const baseMsgMyMultiMint = { creator: "", amount: "", recipients: "" };
 export const MsgMyMultiMint = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== "") {
@@ -131,7 +131,7 @@ export const MsgMyMultiMint = {
         if (message.amount !== "") {
             writer.uint32(18).string(message.amount);
         }
-        for (const v of message.receivers) {
+        for (const v of message.recipients) {
             writer.uint32(26).string(v);
         }
         return writer;
@@ -140,7 +140,7 @@ export const MsgMyMultiMint = {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = { ...baseMsgMyMultiMint };
-        message.receivers = [];
+        message.recipients = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -151,7 +151,7 @@ export const MsgMyMultiMint = {
                     message.amount = reader.string();
                     break;
                 case 3:
-                    message.receivers.push(reader.string());
+                    message.recipients.push(reader.string());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -162,7 +162,7 @@ export const MsgMyMultiMint = {
     },
     fromJSON(object) {
         const message = { ...baseMsgMyMultiMint };
-        message.receivers = [];
+        message.recipients = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
@@ -175,9 +175,9 @@ export const MsgMyMultiMint = {
         else {
             message.amount = "";
         }
-        if (object.receivers !== undefined && object.receivers !== null) {
-            for (const e of object.receivers) {
-                message.receivers.push(String(e));
+        if (object.recipients !== undefined && object.recipients !== null) {
+            for (const e of object.recipients) {
+                message.recipients.push(String(e));
             }
         }
         return message;
@@ -186,17 +186,17 @@ export const MsgMyMultiMint = {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
         message.amount !== undefined && (obj.amount = message.amount);
-        if (message.receivers) {
-            obj.receivers = message.receivers.map((e) => e);
+        if (message.recipients) {
+            obj.recipients = message.recipients.map((e) => e);
         }
         else {
-            obj.receivers = [];
+            obj.recipients = [];
         }
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseMsgMyMultiMint };
-        message.receivers = [];
+        message.recipients = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
@@ -209,9 +209,9 @@ export const MsgMyMultiMint = {
         else {
             message.amount = "";
         }
-        if (object.receivers !== undefined && object.receivers !== null) {
-            for (const e of object.receivers) {
-                message.receivers.push(e);
+        if (object.recipients !== undefined && object.recipients !== null) {
+            for (const e of object.recipients) {
+                message.recipients.push(e);
             }
         }
         return message;

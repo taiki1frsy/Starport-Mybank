@@ -25,7 +25,7 @@ message MsgMyMintResponse {
 message MsgMyMultiMint {
   string creator = 1;
   string amount = 2;
-  repeated string receivers = 3;
+  repeated string recipients = 3;
 }
 
 message MsgMyMultiMintResponse {

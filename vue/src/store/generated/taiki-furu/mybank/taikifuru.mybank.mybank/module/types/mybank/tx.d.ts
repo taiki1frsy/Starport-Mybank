@@ -10,7 +10,7 @@ export interface MsgMyMintResponse {
 export interface MsgMyMultiMint {
     creator: string;
     amount: string;
-    receivers: string[];
+    recipients: string[];
 }
 export interface MsgMyMultiMintResponse {
 }

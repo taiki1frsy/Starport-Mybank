@@ -27,8 +27,13 @@ func (k msgServer) MyMint(goCtx context.Context, msg *types.MsgMyMint) (*types.M
 func (k msgServer) MyMultiMint(goCtx context.Context, msg *types.MsgMyMultiMint) (*types.MsgMyMultiMintResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
+	recipient := ""
+	for _, recipient = range msg.Recipients {
+		err := k.AddValue(ctx, recipient, msg.Amount)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	return &types.MsgMyMultiMintResponse{}, nil
 }

@@ -9,11 +9,11 @@ const TypeMsgMyMultiMint = "my_multi_mint"
 
 var _ sdk.Msg = &MsgMyMultiMint{}
 
-func NewMsgMyMultiMint(creator string, amount string, receivers []string) *MsgMyMultiMint {
+func NewMsgMyMultiMint(creator string, amount string, recipients []string) *MsgMyMultiMint {
 	return &MsgMyMultiMint{
-		Creator:   creator,
-		Amount:    amount,
-		Receivers: receivers,
+		Creator:    creator,
+		Amount:     amount,
+		Recipients: recipients,
 	}
 }
 
