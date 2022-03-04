@@ -1,11 +1,17 @@
 syntax = "proto3";
 package taikifuru.mybank.mybank;
 
-option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
-
 import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/taiki-furu/mybank/x/mybank/types";
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all)         = false;
 
 message MyBalance {
+    option (gogoproto.equal) = true;
+
     string address = 1;
-    string value= 2;
+    string value= 2
+        [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "Int", (gogoproto.nullable) = false];
 }
