@@ -15,9 +15,10 @@ import (
 )
 
 var (
+	zeroValue  = sdk.ZeroInt()
 	genesisAcc = types.MyBalance{
 		Address: "cosmos17sntfnytl7g69pcdzeydty6t2ndztwh6nxtyeg",
-		Value:   "10000",
+		Value:   &zeroValue,
 	}
 	//ctx = sdk.Contex
 )

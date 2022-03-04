@@ -4,14 +4,14 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgMySend } from "./types/mybank/tx";
 import { MsgMyMultiMint } from "./types/mybank/tx";
+import { MsgMySend } from "./types/mybank/tx";
 import { MsgMyMint } from "./types/mybank/tx";
 
 
 const types = [
-  ["/taikifuru.mybank.mybank.MsgMySend", MsgMySend],
   ["/taikifuru.mybank.mybank.MsgMyMultiMint", MsgMyMultiMint],
+  ["/taikifuru.mybank.mybank.MsgMySend", MsgMySend],
   ["/taikifuru.mybank.mybank.MsgMyMint", MsgMyMint],
   
 ];
@@ -45,8 +45,8 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgMySend: (data: MsgMySend): EncodeObject => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMySend", value: MsgMySend.fromPartial( data ) }),
     msgMyMultiMint: (data: MsgMyMultiMint): EncodeObject => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMyMultiMint", value: MsgMyMultiMint.fromPartial( data ) }),
+    msgMySend: (data: MsgMySend): EncodeObject => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMySend", value: MsgMySend.fromPartial( data ) }),
     msgMyMint: (data: MsgMyMint): EncodeObject => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMyMint", value: MsgMyMint.fromPartial( data ) }),
     
   };
