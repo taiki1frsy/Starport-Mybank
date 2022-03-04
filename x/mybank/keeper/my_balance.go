@@ -17,11 +17,7 @@ func (k Keeper) GetMyBalance(ctx sdk.Context, addr string) types.MyBalance {
 
 	myBalanceByte := balanceStore.Get(accAddr.Bytes())
 	if myBalanceByte == nil {
-<<<<<<< HEAD
-
-=======
 		value := sdk.ZeroInt()
->>>>>>> fifth
 		var newMyBalance = types.MyBalance{
 			Address: addr,
 			Value:   &value,
