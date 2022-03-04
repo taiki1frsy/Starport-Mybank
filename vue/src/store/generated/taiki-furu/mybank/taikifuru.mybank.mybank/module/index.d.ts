@@ -1,6 +1,11 @@
 import { StdFee } from "@cosmjs/launchpad";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+<<<<<<< HEAD
+=======
+import { MsgMyMultiMint } from "./types/mybank/tx";
+import { MsgMySend } from "./types/mybank/tx";
+>>>>>>> fifth
 import { MsgMyMint } from "./types/mybank/tx";
 import { MsgMyMultiMint } from "./types/mybank/tx";
 import { MsgMySend } from "./types/mybank/tx";
@@ -15,6 +20,11 @@ interface SignAndBroadcastOptions {
 }
 declare const txClient: (wallet: OfflineSigner, { addr: addr }?: TxClientOptions) => Promise<{
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }?: SignAndBroadcastOptions) => any;
+<<<<<<< HEAD
+=======
+    msgMyMultiMint: (data: MsgMyMultiMint) => EncodeObject;
+    msgMySend: (data: MsgMySend) => EncodeObject;
+>>>>>>> fifth
     msgMyMint: (data: MsgMyMint) => EncodeObject;
     msgMyMultiMint: (data: MsgMyMultiMint) => EncodeObject;
     msgMySend: (data: MsgMySend) => EncodeObject;

@@ -13,5 +13,9 @@ message MyBalance {
 
     string address = 1;
     string value= 2
+<<<<<<< HEAD
         [(cosmos_proto.scalar) = "cosmos.Int", (gogoproto.customtype) = "Int", (gogoproto.nullable) = false];
+=======
+    [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+>>>>>>> fifth
 }
