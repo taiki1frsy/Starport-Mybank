@@ -25,6 +25,11 @@ export interface MybankMyBalance {
  */
 export type MybankParams = object;
 
+export interface MybankQueryMyBalanceValueResponse {
+  address?: string;
+  value?: string;
+}
+
 export interface MybankQueryMyBalancesResponse {
   MyBalance?: MybankMyBalance[];
 
@@ -318,6 +323,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryMyBalanceValue
+   * @summary Queries a list of MyBalanceValue items.
+   * @request GET:/taiki-furu/mybank/mybank/my_balance_value/{address}
+   */
+  queryMyBalanceValue = (address: string, params: RequestParams = {}) =>
+    this.request<MybankQueryMyBalanceValueResponse, RpcStatus>({
+      path: `/taiki-furu/mybank/mybank/my_balance_value/${address}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

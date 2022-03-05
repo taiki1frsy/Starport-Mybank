@@ -20,6 +20,13 @@ export interface QueryMyBalancesResponse {
     /** Adding pagination to response */
     pagination: PageResponse | undefined;
 }
+export interface QueryMyBalanceValueRequest {
+    address: string;
+}
+export interface QueryMyBalanceValueResponse {
+    address: string;
+    value: string;
+}
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryParamsRequest;
@@ -48,18 +55,35 @@ export declare const QueryMyBalancesResponse: {
     toJSON(message: QueryMyBalancesResponse): unknown;
     fromPartial(object: DeepPartial<QueryMyBalancesResponse>): QueryMyBalancesResponse;
 };
+export declare const QueryMyBalanceValueRequest: {
+    encode(message: QueryMyBalanceValueRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryMyBalanceValueRequest;
+    fromJSON(object: any): QueryMyBalanceValueRequest;
+    toJSON(message: QueryMyBalanceValueRequest): unknown;
+    fromPartial(object: DeepPartial<QueryMyBalanceValueRequest>): QueryMyBalanceValueRequest;
+};
+export declare const QueryMyBalanceValueResponse: {
+    encode(message: QueryMyBalanceValueResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryMyBalanceValueResponse;
+    fromJSON(object: any): QueryMyBalanceValueResponse;
+    toJSON(message: QueryMyBalanceValueResponse): unknown;
+    fromPartial(object: DeepPartial<QueryMyBalanceValueResponse>): QueryMyBalanceValueResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
     /** Queries a list of MyBalances items. */
     MyBalances(request: QueryMyBalancesRequest): Promise<QueryMyBalancesResponse>;
+    /** Queries a list of MyBalanceValue items. */
+    MyBalanceValue(request: QueryMyBalanceValueRequest): Promise<QueryMyBalanceValueResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
     MyBalances(request: QueryMyBalancesRequest): Promise<QueryMyBalancesResponse>;
+    MyBalanceValue(request: QueryMyBalanceValueRequest): Promise<QueryMyBalanceValueResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

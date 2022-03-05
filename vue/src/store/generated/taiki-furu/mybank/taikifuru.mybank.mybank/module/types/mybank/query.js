@@ -227,6 +227,139 @@ export const QueryMyBalancesResponse = {
         return message;
     },
 };
+const baseQueryMyBalanceValueRequest = { address: "" };
+export const QueryMyBalanceValueRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.address !== "") {
+            writer.uint32(10).string(message.address);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQueryMyBalanceValueRequest,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.address = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQueryMyBalanceValueRequest,
+        };
+        if (object.address !== undefined && object.address !== null) {
+            message.address = String(object.address);
+        }
+        else {
+            message.address = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.address !== undefined && (obj.address = message.address);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQueryMyBalanceValueRequest,
+        };
+        if (object.address !== undefined && object.address !== null) {
+            message.address = object.address;
+        }
+        else {
+            message.address = "";
+        }
+        return message;
+    },
+};
+const baseQueryMyBalanceValueResponse = { address: "", value: "" };
+export const QueryMyBalanceValueResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.address !== "") {
+            writer.uint32(10).string(message.address);
+        }
+        if (message.value !== "") {
+            writer.uint32(18).string(message.value);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseQueryMyBalanceValueResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.address = reader.string();
+                    break;
+                case 2:
+                    message.value = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseQueryMyBalanceValueResponse,
+        };
+        if (object.address !== undefined && object.address !== null) {
+            message.address = String(object.address);
+        }
+        else {
+            message.address = "";
+        }
+        if (object.value !== undefined && object.value !== null) {
+            message.value = String(object.value);
+        }
+        else {
+            message.value = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.address !== undefined && (obj.address = message.address);
+        message.value !== undefined && (obj.value = message.value);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseQueryMyBalanceValueResponse,
+        };
+        if (object.address !== undefined && object.address !== null) {
+            message.address = object.address;
+        }
+        else {
+            message.address = "";
+        }
+        if (object.value !== undefined && object.value !== null) {
+            message.value = object.value;
+        }
+        else {
+            message.value = "";
+        }
+        return message;
+    },
+};
 export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -240,5 +373,10 @@ export class QueryClientImpl {
         const data = QueryMyBalancesRequest.encode(request).finish();
         const promise = this.rpc.request("taikifuru.mybank.mybank.Query", "MyBalances", data);
         return promise.then((data) => QueryMyBalancesResponse.decode(new Reader(data)));
+    }
+    MyBalanceValue(request) {
+        const data = QueryMyBalanceValueRequest.encode(request).finish();
+        const promise = this.rpc.request("taikifuru.mybank.mybank.Query", "MyBalanceValue", data);
+        return promise.then((data) => QueryMyBalanceValueResponse.decode(new Reader(data)));
     }
 }
