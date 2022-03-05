@@ -9,6 +9,10 @@ export interface MybankMyBalance {
  * Params defines the parameters for the module.
  */
 export declare type MybankParams = object;
+export interface MybankQueryMyBalanceValueResponse {
+    address?: string;
+    value?: string;
+}
 export interface MybankQueryMyBalancesResponse {
     MyBalance?: MybankMyBalance[];
     /**
@@ -152,6 +156,15 @@ export declare class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryMyBalanceValue
+     * @summary Queries a list of MyBalanceValue items.
+     * @request GET:/taiki-furu/mybank/mybank/my_balance_value/{address}
+     */
+    queryMyBalanceValue: (address: string, params?: RequestParams) => Promise<HttpResponse<MybankQueryMyBalanceValueResponse, RpcStatus>>;
     /**
      * No description
      *

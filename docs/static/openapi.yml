@@ -12574,6 +12574,45 @@ paths:
                         }
       tags:
         - Query
+  '/taiki-furu/mybank/mybank/my_balance_value/{address}':
+    get:
+      summary: Queries a list of MyBalanceValue items.
+      operationId: TaikifuruMybankMybankMyBalanceValue
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              address:
+                type: string
+              value:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: address
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /taiki-furu/mybank/mybank/my_balances:
     get:
       summary: Queries a list of MyBalances items.
@@ -20101,6 +20140,13 @@ definitions:
   taikifuru.mybank.mybank.Params:
     type: object
     description: Params defines the parameters for the module.
+  taikifuru.mybank.mybank.QueryMyBalanceValueResponse:
+    type: object
+    properties:
+      address:
+        type: string
+      value:
+        type: string
   taikifuru.mybank.mybank.QueryMyBalancesResponse:
     type: object
     properties:

@@ -21,6 +21,11 @@ service Query {
 		option (google.api.http).get = "/taiki-furu/mybank/mybank/my_balances";
 	}
 
+// Queries a list of MyBalanceValue items.
+	rpc MyBalanceValue(QueryMyBalanceValueRequest) returns (QueryMyBalanceValueResponse) {
+		option (google.api.http).get = "/taiki-furu/mybank/mybank/my_balance_value/{address}";
+	}
+
 // this line is used by starport scaffolding # 2
 }
 
@@ -42,6 +47,15 @@ message QueryMyBalancesResponse {
    repeated MyBalance MyBalance = 1;
    // Adding pagination to response
    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryMyBalanceValueRequest {
+  string address = 1;
+}
+
+message QueryMyBalanceValueResponse {
+  string address = 1;
+  string value = 2;
 }
 
 // this line is used by starport scaffolding # 3

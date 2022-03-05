@@ -29,6 +29,15 @@ export interface QueryMyBalancesResponse {
   pagination: PageResponse | undefined;
 }
 
+export interface QueryMyBalanceValueRequest {
+  address: string;
+}
+
+export interface QueryMyBalanceValueResponse {
+  address: string;
+  value: string;
+}
+
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -287,12 +296,171 @@ export const QueryMyBalancesResponse = {
   },
 };
 
+const baseQueryMyBalanceValueRequest: object = { address: "" };
+
+export const QueryMyBalanceValueRequest = {
+  encode(
+    message: QueryMyBalanceValueRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryMyBalanceValueRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryMyBalanceValueRequest,
+    } as QueryMyBalanceValueRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryMyBalanceValueRequest {
+    const message = {
+      ...baseQueryMyBalanceValueRequest,
+    } as QueryMyBalanceValueRequest;
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address);
+    } else {
+      message.address = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryMyBalanceValueRequest): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryMyBalanceValueRequest>
+  ): QueryMyBalanceValueRequest {
+    const message = {
+      ...baseQueryMyBalanceValueRequest,
+    } as QueryMyBalanceValueRequest;
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    } else {
+      message.address = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryMyBalanceValueResponse: object = { address: "", value: "" };
+
+export const QueryMyBalanceValueResponse = {
+  encode(
+    message: QueryMyBalanceValueResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryMyBalanceValueResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryMyBalanceValueResponse,
+    } as QueryMyBalanceValueResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryMyBalanceValueResponse {
+    const message = {
+      ...baseQueryMyBalanceValueResponse,
+    } as QueryMyBalanceValueResponse;
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address);
+    } else {
+      message.address = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryMyBalanceValueResponse): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryMyBalanceValueResponse>
+  ): QueryMyBalanceValueResponse {
+    const message = {
+      ...baseQueryMyBalanceValueResponse,
+    } as QueryMyBalanceValueResponse;
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    } else {
+      message.address = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** Queries a list of MyBalances items. */
   MyBalances(request: QueryMyBalancesRequest): Promise<QueryMyBalancesResponse>;
+  /** Queries a list of MyBalanceValue items. */
+  MyBalanceValue(
+    request: QueryMyBalanceValueRequest
+  ): Promise<QueryMyBalanceValueResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -321,6 +489,20 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryMyBalancesResponse.decode(new Reader(data))
+    );
+  }
+
+  MyBalanceValue(
+    request: QueryMyBalanceValueRequest
+  ): Promise<QueryMyBalanceValueResponse> {
+    const data = QueryMyBalanceValueRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "taikifuru.mybank.mybank.Query",
+      "MyBalanceValue",
+      data
+    );
+    return promise.then((data) =>
+      QueryMyBalanceValueResponse.decode(new Reader(data))
     );
   }
 }
