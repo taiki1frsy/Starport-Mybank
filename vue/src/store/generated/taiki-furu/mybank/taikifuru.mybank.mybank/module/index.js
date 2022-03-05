@@ -3,12 +3,12 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgMyMint } from "./types/mybank/tx";
-import { MsgMySend } from "./types/mybank/tx";
 import { MsgMyMultiMint } from "./types/mybank/tx";
+import { MsgMySend } from "./types/mybank/tx";
 const types = [
     ["/taikifuru.mybank.mybank.MsgMyMint", MsgMyMint],
-    ["/taikifuru.mybank.mybank.MsgMySend", MsgMySend],
     ["/taikifuru.mybank.mybank.MsgMyMultiMint", MsgMyMultiMint],
+    ["/taikifuru.mybank.mybank.MsgMySend", MsgMySend],
 ];
 export const MissingWalletError = new Error("wallet is required");
 export const registry = new Registry(types);
@@ -30,8 +30,8 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
         msgMyMint: (data) => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMyMint", value: MsgMyMint.fromPartial(data) }),
-        msgMySend: (data) => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMySend", value: MsgMySend.fromPartial(data) }),
         msgMyMultiMint: (data) => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMyMultiMint", value: MsgMyMultiMint.fromPartial(data) }),
+        msgMySend: (data) => ({ typeUrl: "/taikifuru.mybank.mybank.MsgMySend", value: MsgMySend.fromPartial(data) }),
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {
